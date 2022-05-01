@@ -4,15 +4,34 @@ import Char from './components/Char'
 import {Routes, Route } from 'react-router-dom';
 
 
-function App() {
-  return (
-    <div className="App">
-      <Routes>
+
+class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({loading: false})
+    }, 2500);
+  }
+
+  render() {
+   return this.state.loading ? (
+     <h6 className="loading">Loading...</h6>
+   ) : (
+     <div className="App">
+       <Routes>
          <Route exact path="/" element={<Char />} />
          <Route exact path="*" element={<Char />} />
        </Routes>
-    </div>
-  );
+     </div>
+   );
+  }
+
 }
 
 export default App;
