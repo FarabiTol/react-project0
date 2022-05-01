@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { callAPI } from "./charSlice";
-
+import { Link, useParams } from "react-router-dom";
 
 import {
     Card,
@@ -14,7 +14,16 @@ import {
     const dispatch = useDispatch();
     const data = useSelector((state) => state);
     const newData = data.characters;
-    
+    let params = useParams();
+  
+    const [currentPage, setCurrentPage] = useState(Number(params?.page || 0));
+    const numberinPage = 8;
+    const start = currentPage * numberinPage;
+    const end = start + numberinPage;
+    const parcialData = newData.slice(start, end);
+    const howManyPages = Math.ceil(newData.length / numberinPage);
+    const arrayBtn = new Array(howManyPages).fill("buttonPage");
+
     
     useEffect(() => {
       dispatch(callAPI());
@@ -23,9 +32,8 @@ import {
     return (
       <>
       
-        
         <div className="render">
-          {newData.map((user) => {
+          {parcialData.map((user) => {
             return (
               <Card className="cardex" sx={{ maxWidth: 345 }} key={user.id} style={{borderRadius: 20, cursor:'pointer', height: '500px'}}>
                 <CardMedia style={{marginTop: 20}}
@@ -56,7 +64,41 @@ import {
           })}
         </div>
   
-       
+        <div className="all-btn">
+          <Link to={`/page/${currentPage < 1 ? 1 : currentPage}`}>
+            <button
+              className="btn prev"
+              onClick={() => setCurrentPage((prev) => (prev < 1 ? 0 : prev - 1))}
+            >
+              Prev
+            </button>
+          </Link>
+          {arrayBtn.map((page, index) => {
+            return (
+              <>
+                <Link to={`/page/${index + 1}`} key={index + page}>
+                  <button
+                    className="btn"
+                    key={page + index}
+                    onClick={() => setCurrentPage(index)}
+                  >
+                    {index + 1}
+                  </button>
+                </Link>
+              </>
+            );
+          })}
+          <Link to={`/page/${currentPage > 10 ? 10 : currentPage + 1}`}>
+            <button
+              className="btn next"
+              onClick={() =>
+                setCurrentPage((prev) =>  prev + 1)
+              }
+            >
+              Next
+            </button>
+          </Link>
+        </div>
       </>
     );
   }
