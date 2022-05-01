@@ -16,6 +16,7 @@ import {
     const newData = data.characters;
     let params = useParams();
   
+    const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(Number(params?.page || 0));
     const numberinPage = 8;
     const start = currentPage * numberinPage;
@@ -31,9 +32,24 @@ import {
   
     return (
       <>
-      
+      <h6 className="head">Who is your favorite character?</h6>
+        <input
+          type="text"
+          className="input"
+          placeholder="Search by name,title and family"
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <div className="render">
-          {parcialData.map((user) => {
+          {parcialData.filter((el) => {
+            if(search === ''){
+              return el
+            }else if(el.fullName.toLowerCase().includes(search.toLowerCase())){
+              return el;
+            }else if(el.title.toLowerCase().includes(search.toLowerCase())){
+              return el;
+            }else if(el.family.toLowerCase().includes(search.toLowerCase())){
+                return el;
+          }}).map((user) => {
             return (
               <Card className="cardex" sx={{ maxWidth: 345 }} key={user.id} style={{borderRadius: 20, cursor:'pointer', height: '500px'}}>
                 <CardMedia style={{marginTop: 20}}
