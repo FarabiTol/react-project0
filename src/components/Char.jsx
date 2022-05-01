@@ -36,7 +36,7 @@ import {
         <input
           type="text"
           className="input"
-          placeholder="Search by name,title and family"
+          placeholder="Search by name,title and family "
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className="render">
